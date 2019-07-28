@@ -5,11 +5,14 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jilla.retrofitexample.models.User;
 import com.jilla.retrofitexample.network.GetDataService;
 import com.jilla.retrofitexample.network.RetrofitClientInstance;
+
+import java.util.LinkedList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,17 +29,23 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    UserListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        adapter = new UserListAdapter();
+        adapter.users = new LinkedList<User>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        getData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getData();
     }
 
     void getData(){
@@ -46,14 +55,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 progressBar.setVisibility(View.GONE);
-                if(response == null || response.body() == null){
+                if(response.body() == null){
                     return;
                 }
                 int size = response.body().size();
                 Log.e("MainActivity","recieved size of posts is "+size);
                 if(size > 0){
-                    User user = response.body().get(0);
-                    Log.e("MainActivity",user.toString());
+                    adapter.users = response.body();
+                    adapter.notifyDataSetChanged();
                 }
             }
 

@@ -4,28 +4,28 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
     @SerializedName("id")
-    Integer id;
+    public Integer id;
 
     @SerializedName("name")
-    String name;
+    public String name;
 
     @SerializedName("username")
-    String userName;
+    public String userName;
 
     @SerializedName("email")
-    String emailID;
+    public String emailID;
 
     @SerializedName("phone")
-    String phone;
+    public String phone;
 
     @SerializedName("website")
-    String website;
+    public String website;
 
     @SerializedName("address")
-    Address address;
+    public Address address;
 
     @SerializedName("company")
-    Company company;
+    public Company company;
 
     @Override
     public String toString(){
